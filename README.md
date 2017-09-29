@@ -1,3 +1,14 @@
+# BIM 360 Excel Exporter Plus #
+
+This app is based on the Export to Excel app (see below).  This app exports the following file types into an Excel spreadsheet:
+
+* .rvt
+* .f3d
+* .iam
+
+Other file types will be supported in a later version.
+
+
 # Export to Excel
 
 ![thumbnail](video-exportXLS.gif)
