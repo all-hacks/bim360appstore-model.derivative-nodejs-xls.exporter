@@ -9,6 +9,11 @@ This app is based on the Export to Excel app (see below).  This app exports the 
 Other file types will be supported in a later version.
 
 
+### Live version
+
+[https://bim360-excel-exporter-plus.herokuapp.com/](https://bim360-excel-exporter-plus.herokuapp.com/)
+
+
 # Export to Excel
 
 ![thumbnail](video-exportXLS.gif)
