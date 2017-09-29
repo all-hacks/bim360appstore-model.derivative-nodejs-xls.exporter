@@ -62,8 +62,8 @@ var ForgeXLS = {
   },
 
   downloadXLSX: function (urn, fileName, token, status, fileType) {    
-    if (fileType.indexOf('rvt') == -1) {
-      if (status) status(true, 'Not a Revit file. Only Revit files are supported, at the moment. Aborting conversion.');
+    if (fileType.indexOf('rvt') == -1 && fileType.indexOf('f3d') == -1 && fileType.indexOf('iam') == -1) {
+      if (status) status(true, 'Only .rvt, .f3d and .iam files are supported, at the moment. Aborting conversion.');
       return;
     }
 
@@ -72,7 +72,7 @@ var ForgeXLS = {
       status(false, 'Reading project information....');
     }
 
-    this.prepareTables(urn, token, function (tables) {
+    this.prepareTables(urn, token, fileType, function (tables) {
       if (status) status(false, 'Building XLSX file...');
 
       var wb = new Workbook();
@@ -153,7 +153,7 @@ var ForgeXLS = {
     return ws;
   },
 
-  prepareTables: function (urn, token, callback) {
+  prepareTables: function (urn, token, fileType, callback) {
     this.Utility.getMetadata(urn, token, function (metadata) {
       if (metadata.data.metadata.length == 0) {
         alert('Unexpected metadata');
@@ -163,13 +163,13 @@ var ForgeXLS = {
 
       ForgeXLS.Utility.getHierarchy(urn, guid, token, function (hierarchy) {
         ForgeXLS.Utility.getProperties(urn, guid, token, function (properties) {
-          callback(ForgeXLS.prepareRawData(hierarchy, properties));
+          callback(ForgeXLS.prepareRawData(hierarchy, properties, fileType));
         });
       });
     });
   },
 
-  prepareRawData: function (hierarchy, properties) {
+  prepareRawData: function (hierarchy, properties, fileType) {
     var tables = {};
     hierarchy.data.objects[0].objects.forEach(function (category) {
       var idsOnCategory = [];
@@ -177,7 +177,7 @@ var ForgeXLS = {
 
       var rows = [];
       idsOnCategory.forEach(function (objectid) {
-        var columns = ForgeXLS.getProperties(objectid, properties);
+        var columns = ForgeXLS.getProperties(objectid, properties, fileType);
         rows.push(columns);
       });
       tables[category.name] = rows;
@@ -196,22 +196,43 @@ var ForgeXLS = {
     });
   },
 
-  getProperties: function (id, objCollection) {
+  getProperties: function (id, objCollection, fileType) {
     var data = {};
     objCollection.data.collection.forEach(function (obj) {
       if (obj.objectid != id) return;
 
       data['Viewer ID'] = id;
-      data['Revit ID'] = obj.name.match(/\d+/g)[0];
-      data['Name'] = obj.name.replace('[' + data['Revit ID'] + ']', '').trim();
+
+      if (fileType.indexOf('rvt') != -1) {
+        data['Revit ID'] = obj.name.match(/\d+/g)[0];
+        data['Name'] = obj.name.replace('[' + data['Revit ID'] + ']', '').trim();
+      } else {
+        data['Name'] = obj.name;
+      }
 
       for (var propGroup in obj.properties) {
         if (propGroup.indexOf('__') > -1) break;
         if (obj.properties.hasOwnProperty(propGroup)) {
-          for (var propName in obj.properties[propGroup]) {
-            if (obj.properties[propGroup].hasOwnProperty(propName) && !Array.isArray(obj.properties[propGroup][propName]))
-              data[propGroup + ':' + propName] = obj.properties[propGroup][propName];
+
+          if (fileType.indexOf('rvt') != -1) {
+            for (var propName in obj.properties[propGroup]) {
+              if (obj.properties[propGroup].hasOwnProperty(propName) && !Array.isArray(obj.properties[propGroup][propName]))
+                data[propGroup + ':' + propName] = obj.properties[propGroup][propName];
+            }
+          } else {
+            if (Array.isArray(obj.properties[propGroup])) {
+              for (var propName in obj.properties[propGroup]) {
+
+                if (obj.properties[propGroup].hasOwnProperty(propName) && !Array.isArray(obj.properties[propGroup][propName]))
+                  data[propGroup + ':' + propName] = obj.properties[propGroup][propName];
+              }
+
+            } else {
+              data[propGroup] = obj.properties[propGroup];
+            }
+
           }
+
         }
       }
     });
