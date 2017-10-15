@@ -1,10 +1,10 @@
-# BIM 360 Excel Exporter Plus #
+# Excel Exporter Plus for BIM 360 #
 
 This app is based on the Export to Excel app (see below).  This app exports the following file types into an Excel spreadsheet:
 
 * .rvt
 * .f3d
-* .iam
+* .iam (Assembly files can be uploaded through A360)
 
 Other file types will be supported in a later version.
 
@@ -13,20 +13,12 @@ Other file types will be supported in a later version.
 
 [https://bim360-excel-exporter-plus.herokuapp.com/](https://bim360-excel-exporter-plus.herokuapp.com/)
 
-
-# Export to Excel
-
-![thumbnail](video-exportXLS.gif)
+Video: [Youtube](https://youtu.be/VFikCfuseUE)
 
 # Description
 
-This sample application demonstrates how to extract Revit data on your BIM360 account, into an excel spreadsheet.  The sample code demonstates 3-legged OAuth to BIM360, a simple viewer extension and code to handle Revit meta-data and format it into an excel spreadsheet file.
+This sample application demonstrates how to extract supported data files on your BIM360 account, into an excel spreadsheet.  The sample code demonstates 3-legged OAuth to BIM360, a simple viewer extension and code to handle supported meta-data and format it into an excel spreadsheet file.
 
-### Live version
-
-[https://bim360xls.autodesk.io](https://bim360xls.autodesk.io/)
-
-Video: [Youtube](https://youtu.be/800d2xmQl0s)
 
 # Setup
 
@@ -38,7 +30,7 @@ Install [NodeJS](https://nodejs.org).
 
 Clone this project or download it. It's recommended to install [GitHub desktop](https://desktop.github.com/). To clone it via command line, use the following (**Terminal** on MacOSX/Linux, **Git Shell** on Windows):
 
-    git clone https://github.com/wallabyway/bim360appstore-xls-exporter
+    git clone https://github.com/all-hacks/bim360appstore-model.derivative-nodejs-xls.exporter
 
 To run it, install the required packages, set the enviroment variables with your client ID & secret and finally start it. Via command line, navigate to the folder where this repository was cloned and use the following:
 
@@ -97,4 +89,4 @@ Please see the [LICENSE](LICENSE) file for full details.
 
 ## Written by
 
-Forge Partner Development
+Vincent Wong, VC Solution
