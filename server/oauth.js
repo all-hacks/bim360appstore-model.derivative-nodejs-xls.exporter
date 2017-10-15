@@ -117,7 +117,11 @@ router.get('/api/forge/callback/oauth', function (req, res) {
           res.redirect('/');
         })
         .catch(function (error) {
-          respondWithError(res, error)
+          //respondWithError(res, error)
+
+	  console.log(error);
+          res.redirect('/');
+
         });
     })
     .catch(function (error) {
