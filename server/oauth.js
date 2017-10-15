@@ -125,7 +125,11 @@ router.get('/api/forge/callback/oauth', function (req, res) {
         });
     })
     .catch(function (error) {
-      respondWithError(res, error)
+      // respondWithError(res, error)
+
+      console.log(error);
+      res.redirect('/');
+
     });
 });
 
